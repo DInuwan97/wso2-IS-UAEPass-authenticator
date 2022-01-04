@@ -152,13 +152,16 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 String callBackUrl = authenticatorProperties.get(UAEPassAuthenticatorConstants.CALLBACK_URL);
                 String state = context.getContextIdentifier() + "," + UAEPassAuthenticatorConstants.LOGIN_TYPE;
 
+                String ui_locales = authenticatorProperties.get(UAEPassAuthenticatorConstants.UI_LOCALES);
+                String acr_values = authenticatorProperties.get(UAEPassAuthenticatorConstants.ACR_VALUES);
                 String scope = UAEPassAuthenticatorConstants.OAUTH_OIDC_SCOPE;
                OAuthClientRequest authzRequest = UAEPassOAuthClientRequest.authorizationLoca(authorizationEP)
                         .setClientId(clientId)
                         .setRedirectURI(callBackUrl)
                         .setResponseType(UAEPassAuthenticatorConstants.OAUTH2_GRANT_TYPE_CODE).setScope(scope)
                         .setState(state)
-                        .setUiLocales("en").
+                        .setUiLocales(ui_locales)
+                        .setAcrValues(acr_values).
                         buildQueryMessage();
 
                 String loginPage = authzRequest.getLocationUri();
