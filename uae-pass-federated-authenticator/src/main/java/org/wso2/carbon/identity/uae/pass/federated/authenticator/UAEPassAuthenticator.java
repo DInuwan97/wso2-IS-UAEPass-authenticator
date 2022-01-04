@@ -153,11 +153,13 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 String state = context.getContextIdentifier() + "," + UAEPassAuthenticatorConstants.LOGIN_TYPE;
 
                 String scope = UAEPassAuthenticatorConstants.OAUTH_OIDC_SCOPE;
-                OAuthClientRequest authzRequest = OAuthClientRequest.authorizationLocation(authorizationEP)
+               OAuthClientRequest authzRequest = UAEPassOAuthClientRequest.authorizationLoca(authorizationEP)
                         .setClientId(clientId)
                         .setRedirectURI(callBackUrl)
                         .setResponseType(UAEPassAuthenticatorConstants.OAUTH2_GRANT_TYPE_CODE).setScope(scope)
-                        .setState(state).buildQueryMessage();
+                        .setState(state)
+                        .setUiLocales("en").
+                        buildQueryMessage();
 
                 String loginPage = authzRequest.getLocationUri();
                 response.sendRedirect(loginPage);
@@ -302,3 +304,4 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         return null;
     }
 }
+
