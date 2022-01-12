@@ -130,6 +130,8 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         acr_values.setDisplayOrder(7);
         configProperties.add(acr_values);
 
+        log.info("customized input fields are created.");
+
         return configProperties;
     }
 
@@ -144,8 +146,10 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                                                  AuthenticationContext context) throws AuthenticationFailedException {
 
         try {
+            log.info("request hits towards thr login.do");
             Map<String, String> authenticatorProperties = context.getAuthenticatorProperties();
             if (authenticatorProperties != null) {
+
                 String clientId = authenticatorProperties.get(UAEPassAuthenticatorConstants.CLIENT_ID);
                 String authorizationEP =
                         authenticatorProperties.get(UAEPassAuthenticatorConstants.OAUTH2_AUTHZ_URL);
@@ -155,6 +159,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 String ui_locales = authenticatorProperties.get(UAEPassAuthenticatorConstants.UI_LOCALES);
                 String acr_values = authenticatorProperties.get(UAEPassAuthenticatorConstants.ACR_VALUES);
                 String scope = UAEPassAuthenticatorConstants.OAUTH_OIDC_SCOPE;
+
                OAuthClientRequest authzRequest = UAEPassOAuthClientRequest.authorizationLoca(authorizationEP)
                         .setClientId(clientId)
                         .setRedirectURI(callBackUrl)
@@ -167,17 +172,19 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 String loginPage = authzRequest.getLocationUri();
                 response.sendRedirect(loginPage);
             } else {
+                log.error("authentication properties are not null");
                 throw new AuthenticationFailedException("Error while retrieving properties. " +
                         "Authenticator Properties cannot be null");
             }
         } catch (OAuthSystemException | IOException e) {
+            log.error("Authorization code request building failed." ,e);
             throw new AuthenticationFailedException("Exception while building authorization code request", e);
         }
     }
 
 
     /**
-     * Implements the logic of the custom federated authenticator.
+     * Implements the logic of the UAE Pass federated authenticator.
      */
     @Override
     protected void processAuthenticationResponse(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context) throws AuthenticationFailedException {
@@ -218,6 +225,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
             }
             context.setSubject(authenticatedUser);
         } catch (OAuthProblemException e) {
+            log.error("Authentication process failed",e);
             throw new AuthenticationFailedException("Authentication process failed", e);
         }
     }
@@ -229,6 +237,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         if (state != null) {
             return state.split(",")[0];
         } else {
+            log.error("An unique identifier couldn't issue for both Request and Response. ContextIdentifier is NULL");
             return null;
         }
     }
@@ -256,7 +265,9 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         return jwtAttributeMap;
     }
 
-
+    /**
+     * Request the access token
+     */
     protected OAuthClientRequest getAccessTokenRequest(AuthenticationContext context, OAuthAuthzResponse
             authzResponse) throws AuthenticationFailedException {
 
@@ -276,8 +287,10 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 accessTokenRequest.addHeader(UAEPassAuthenticatorConstants.HTTP_ORIGIN_HEADER, serverURL);
             }
         } catch (OAuthSystemException e) {
+            log.error("Access Token building request failed",w);
             throw new AuthenticationFailedException("Error while building access token request", e);
         } catch (URLBuilderException e) {
+            log.error("Access Token building request failed",w);
             throw new RuntimeException("Error occurred while building URL in tenant qualified mode.", e);
         }
         return accessTokenRequest;
@@ -290,6 +303,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         try {
             oAuthResponse = oAuthClient.accessToken(accessRequest);
         } catch (OAuthSystemException | OAuthProblemException e) {
+            log.error("Access Token requesting failed",e);
             throw new AuthenticationFailedException("Exception while requesting access token");
         }
         return oAuthResponse;
@@ -304,7 +318,9 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 return stateElements[1];
             }
         }
+        log.error("Login Type's state is null");
         return null;
     }
+
 }
 
