@@ -130,8 +130,9 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         acr_values.setDisplayOrder(7);
         configProperties.add(acr_values);
 
-        log.info("customized input fields are created.");
-
+        if (log.isDebugEnabled()) {
+            log.info("customized input fields are created.");
+        }
         return configProperties;
     }
 
@@ -146,7 +147,9 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                                                  AuthenticationContext context) throws AuthenticationFailedException {
 
         try {
-            log.info("request hits towards thr login.do");
+            if(log.isDebugEnabled()){
+                log.info("request hits towards thr login.do");
+            }
             Map<String, String> authenticatorProperties = context.getAuthenticatorProperties();
             if (authenticatorProperties != null) {
 
@@ -172,12 +175,16 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 String loginPage = authzRequest.getLocationUri();
                 response.sendRedirect(loginPage);
             } else {
-                log.error("authentication properties are not null");
+                if(log.isDebugEnabled()) {
+                    log.error("authentication properties are not null");
+                }
                 throw new AuthenticationFailedException("Error while retrieving properties. " +
                         "Authenticator Properties cannot be null");
             }
         } catch (OAuthSystemException | IOException e) {
-            log.error("Authorization code request building failed." ,e);
+            if(log.isDebugEnabled()) {
+                log.error("Authorization code request building failed.", e);
+            }
             throw new AuthenticationFailedException("Exception while building authorization code request", e);
         }
     }
@@ -225,7 +232,9 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
             }
             context.setSubject(authenticatedUser);
         } catch (OAuthProblemException e) {
-            log.error("Authentication process failed",e);
+            if(log.isDebugEnabled()) {
+                log.error("Authentication process failed", e);
+            }
             throw new AuthenticationFailedException("Authentication process failed", e);
         }
     }
@@ -237,7 +246,9 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         if (state != null) {
             return state.split(",")[0];
         } else {
-            log.error("An unique identifier couldn't issue for both Request and Response. ContextIdentifier is NULL");
+            if(log.isDebugEnabled()) {
+                log.error("An unique identifier couldn't issue for both Request and Response. ContextIdentifier is NULL");
+            }
             return null;
         }
     }
@@ -287,10 +298,14 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 accessTokenRequest.addHeader(UAEPassAuthenticatorConstants.HTTP_ORIGIN_HEADER, serverURL);
             }
         } catch (OAuthSystemException e) {
-            log.error("Access Token building request failed",e);
+            if(log.isDebugEnabled()) {
+                log.error("Access Token building request failed", e);
+            }
             throw new AuthenticationFailedException("Error while building access token request", e);
         } catch (URLBuilderException e) {
-            log.error("Access Token building request failed",e);
+            if(log.isDebugEnabled()) {
+                log.error("Access Token building request failed", e);
+            }
             throw new RuntimeException("Error occurred while building URL in tenant qualified mode.", e);
         }
         return accessTokenRequest;
@@ -303,7 +318,9 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         try {
             oAuthResponse = oAuthClient.accessToken(accessRequest);
         } catch (OAuthSystemException | OAuthProblemException e) {
-            log.error("Access Token requesting failed",e);
+            if(log.isDebugEnabled()) {
+                log.error("Access Token requesting failed", e);
+            }
             throw new AuthenticationFailedException("Exception while requesting access token");
         }
         return oAuthResponse;
@@ -313,9 +330,15 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
 
         String state = request.getParameter(UAEPassAuthenticatorConstants.OAUTH2_PARAM_STATE);
         if (state != null) {
-            String[] stateElements = state.split(",");
-            if (stateElements.length > 1) {
-                return stateElements[1];
+            try {
+                String[] stateElements = state.split(",");
+                if (stateElements.length > 1) {
+                    return stateElements[1];
+                }
+            } catch (Exception e) {
+                if(log.isDebugEnabled()){
+                    log.error("Empty split elements in state",e);
+                }
             }
         }
         log.error("Login Type's state is null");
