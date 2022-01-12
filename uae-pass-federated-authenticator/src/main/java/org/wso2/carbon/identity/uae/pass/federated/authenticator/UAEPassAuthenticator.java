@@ -287,10 +287,10 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 accessTokenRequest.addHeader(UAEPassAuthenticatorConstants.HTTP_ORIGIN_HEADER, serverURL);
             }
         } catch (OAuthSystemException e) {
-            log.error("Access Token building request failed",w);
+            log.error("Access Token building request failed",e);
             throw new AuthenticationFailedException("Error while building access token request", e);
         } catch (URLBuilderException e) {
-            log.error("Access Token building request failed",w);
+            log.error("Access Token building request failed",e);
             throw new RuntimeException("Error occurred while building URL in tenant qualified mode.", e);
         }
         return accessTokenRequest;
