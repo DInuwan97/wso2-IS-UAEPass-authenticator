@@ -22,7 +22,7 @@ public class UAEPassOAuthClientRequest extends OAuthClientRequest{
         this.url = url;
     }
 
-    public static UAEPassOAuthClientRequest.AuthenticationRequestBuilder authorizationLoca(String url) {
+    public static UAEPassOAuthClientRequest.AuthenticationRequestBuilder authorizationLocationEndpoint(String url) {
         return new UAEPassOAuthClientRequest.AuthenticationRequestBuilder(url);
     }
 

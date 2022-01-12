@@ -160,7 +160,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 String acr_values = authenticatorProperties.get(UAEPassAuthenticatorConstants.ACR_VALUES);
                 String scope = UAEPassAuthenticatorConstants.OAUTH_OIDC_SCOPE;
 
-               OAuthClientRequest authzRequest = UAEPassOAuthClientRequest.authorizationLoca(authorizationEP)
+               OAuthClientRequest authzRequest = UAEPassOAuthClientRequest.authorizationLocationEndpoint(authorizationEP)
                         .setClientId(clientId)
                         .setRedirectURI(callBackUrl)
                         .setResponseType(UAEPassAuthenticatorConstants.OAUTH2_GRANT_TYPE_CODE).setScope(scope)
