@@ -212,7 +212,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
 
             if (StringUtils.isNotBlank(idToken)) {
                 jsonObject = getIdTokenClaims(context, idToken);
-                String authenticatedUserId = getAuthenticateUser(jsonObject);
+                String authenticatedUserId = getAuthenticatedUser(jsonObject);
                 if (authenticatedUserId == null) {
                     throw new AuthenticationFailedException("Cannot find the userId from the id_token sent " +
                             "by the federated IDP.");
@@ -221,7 +221,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                         .createFederateAuthenticatedUserFromSubjectIdentifier(authenticatedUserId);
             } else {
                 authenticatedUser = AuthenticatedUser.createFederateAuthenticatedUserFromSubjectIdentifier(
-                        getAuthenticateUser(jsonObject));
+                        getAuthenticatedUser(jsonObject));
             }
             context.setSubject(authenticatedUser);
         } catch (OAuthProblemException e) {
@@ -243,7 +243,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
     }
 
 
-    protected String getAuthenticateUser(Map<String, Object> oidcClaims) {
+    protected String getAuthenticatedUser(Map<String, Object> oidcClaims) {
         return (String) oidcClaims.get(UAEPassAuthenticatorConstants.SUB);
     }
 
