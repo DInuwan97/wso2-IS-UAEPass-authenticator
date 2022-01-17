@@ -1,3 +1,5 @@
+![Pull Requests](https://badgen.net/github/open-issues/dinuwan97/wso2-IS-UAEPass-authenticator)
+![Contributors](https://badgen.net/github/contributors/dinuwan97/wso2-IS-UAEPass-authenticator)
 # WSO2 Identity Server-UAEPass Federated Authenticator
 This a federated authenticator for WSO2 Identity Server which can be used in UAE Pass IdP. The entire federated authentication process can be denoted as just using 03 steps as follows.
 1. Client app talks to IS1 SP
