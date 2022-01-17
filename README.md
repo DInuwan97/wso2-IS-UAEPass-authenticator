@@ -13,22 +13,25 @@ Bellow sequence diagram will eloborate how the request flow is going to happen w
 1. Fork the repo on GitHub.
 
 2. Clone the project to your own machine.
-
-`git clone https://github.com/<YOUR_USERNAME>/wso2-IS-UAEPass-authenticator.git`
+```
+git clone https://github.com/<YOUR_USERNAME>/wso2-IS-UAEPass-authenticator.git
+```
 
 3. Create a branch using the git checkout command.
-
-`git checkout -b <your-new-branch-name>`
+```
+git checkout -b <your-new-branch-name>`
+```
 
 4. Stage your changes and commit with a meaningful commit message.
-
 ```
 git add .
 git commit -m "<initial commit>"
 ```
-5. Push your work back up to your fork.
 
-`git push origin <add-your-branch-name>`
+5. Push your work back up to your fork.
+```
+git push origin <add-your-branch-name>
+```
 
 ## How to run the project
 1. Open the project using InteliJ IDE.
