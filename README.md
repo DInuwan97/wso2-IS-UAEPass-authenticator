@@ -42,3 +42,11 @@ mvn install
 ```
 4. Browse into `<PROJECT HOME>/target`.
 5. You may abel to sea the created JAR file as `org.wso2.carbon.identity.uae.pass.federated.authenticator-<VERSION>`
+
+## Explanation of the Code
+
+Refer the [UAEPassFederatedAuthenticatorServiceComponent](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/main/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/internal/UAEPassFederatedAuthenticatorServiceComponent.java) class as well since the authenticator is written as OSGI service to deploy in the WSO2 Identity Server and register it as UAEPass Federated Authenticator.
+
+The [UAEPassAuthenticator](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/main/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java) should be written by extending the [AbstractApplicationAuthenticator](https://github.com/wso2/carbon-identity-framework/blob/v5.18.187/components/authentication-framework/org.wso2.carbon.identity.application.authentication.framework/src/main/java/org/wso2/carbon/identity/application/authentication/framework/AbstractApplicationAuthenticator.java) class and implementing the [FederatedApplicationAuthenticator](https://github.com/wso2/carbon-identity-framework/blob/master/components/authentication-framework/org.wso2.carbon.identity.application.authentication.framework/src/main/java/org/wso2/carbon/identity/application/authentication/framework/FederatedApplicationAuthenticator.java) interface.
+
+
