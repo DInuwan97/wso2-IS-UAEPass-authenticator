@@ -49,22 +49,38 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
 
     private static final Log log = LogFactory.getLog(UAEPassAuthenticator.class);
     @Override
+    /**
+     * @param request
+     * @return Boolean
+     */
     public boolean canHandle(HttpServletRequest request) {
         return UAEPassAuthenticatorConstants.LOGIN_TYPE.equals(getLoginType(request));
     }
     @Override
+    /**
+     * @return String
+     */
     public String getFriendlyName() {
         return "UAE Pass Federated";
     }
     @Override
+    /**
+     * @return String
+     */
     public String getName() {
         return "UAEPassFederatedAuthenticator";
     }
     @Override
+    /**
+     * @return String
+     */
     public String getClaimDialectURI() {
         return UAEPassAuthenticatorConstants.OIDC_DIALECT;
     }
     @Override
+    /**
+     * @return List<Property> federated authenticator properties
+     */
     public List<Property> getConfigurationProperties() {
 
         List<Property> configProperties = new ArrayList<>();
@@ -137,10 +153,14 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
     }
 
     /**
-     * Redirects the user to the login page in order to authenticate
-     *
+     * Redirects the user to the login page in order to authentication.
      * In this UAE Pass Authenticator plugin, the user is redirected to the login page of the application which is
      * configured in the UAE Pass side which acts as the external Identity Provider
+     *
+     * @param request
+     * @param response
+     * @param context
+     * @throws AuthenticationFailedException - exception while creating the authorization code
      */
     @Override
     protected void initiateAuthenticationRequest(HttpServletRequest request, HttpServletResponse response,
@@ -188,10 +208,13 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
             throw new AuthenticationFailedException("Exception while building authorization code request", e);
         }
     }
-
-
     /**
      * Implements the logic of the UAE Pass federated authenticator.
+     *
+     * @param request
+     * @param response
+     * @param context
+     * @throws AuthenticationFailedException - exception while creating the access token or id token
      */
     @Override
     protected void processAuthenticationResponse(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context) throws AuthenticationFailedException {
@@ -241,6 +264,10 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
 
 
     @Override
+    /**
+     * @param request
+     * @return String
+     */
     public String getContextIdentifier(HttpServletRequest request) {
         String state = request.getParameter(UAEPassAuthenticatorConstants.OAUTH2_PARAM_STATE);
         if (state != null) {
@@ -253,11 +280,19 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         }
     }
 
-
+    /**
+     * @param oidcClaims
+     * @return String
+     */
     protected String getAuthenticatedUser(Map<String, Object> oidcClaims) {
         return (String) oidcClaims.get(UAEPassAuthenticatorConstants.SUB);
     }
 
+    /**
+     * @param context
+     * @param idToken
+     * @return Map<Strng,Object> - decoded JWT payload via JSON Key value pairs
+     */
     private Map<String, Object> getIdTokenClaims(AuthenticationContext context, String idToken) {
 
         context.setProperty(UAEPassAuthenticatorConstants.ID_TOKEN, idToken);
@@ -277,7 +312,11 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
     }
 
     /**
-     * Request the access token
+     * Request the access token - Create a request to access token endpoint of the external IdP.
+     * @param context
+     * @param authzResponse
+     * @throws AuthenticationFailedException
+     * @return OAuthClientRequest
      */
     protected OAuthClientRequest getAccessTokenRequest(AuthenticationContext context, OAuthAuthzResponse
             authzResponse) throws AuthenticationFailedException {
@@ -311,6 +350,12 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         return accessTokenRequest;
     }
 
+    /**
+     * @param oAuthClient
+     * @param accessRequest
+     * @return OAuthClientResponse
+     * @throws AuthenticationFailedException
+     */
     protected OAuthClientResponse getOauthResponse(OAuthClient oAuthClient, OAuthClientRequest accessRequest)
             throws AuthenticationFailedException {
 
@@ -326,6 +371,10 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         return oAuthResponse;
     }
 
+    /**
+     * @param request
+     * @return String
+     */
     private String getLoginType(HttpServletRequest request) {
 
         String state = request.getParameter(UAEPassAuthenticatorConstants.OAUTH2_PARAM_STATE);
