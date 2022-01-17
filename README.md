@@ -36,6 +36,9 @@ git push origin <add-your-branch-name>
 ## How to run the project
 1. Open the project using InteliJ IDE.
 2. Browse to the InteliJ terminal.
-3. Run the command `mvn install` Then maven dependecies will automatically installed.
+3. Run the command as follows. Then maven dependecies will automatically installed.
+```
+mvn install
+```
 4. Browse into `<PROJECT HOME>/target`.
 5. You may abel to sea the created JAR file as `org.wso2.carbon.identity.uae.pass.federated.authenticator-<VERSION>`
