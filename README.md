@@ -45,44 +45,45 @@ mvn install
 
 ## Explanation of the Code
 
-Refer the [UAEPassFederatedAuthenticatorServiceComponent](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/main/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/internal/UAEPassFederatedAuthenticatorServiceComponent.java) class as well since the authenticator is written as OSGI service to deploy in the WSO2 Identity Server and register it as UAEPass Federated Authenticator.
+Refer the [`UAEPassFederatedAuthenticatorServiceComponent`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/main/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/internal/UAEPassFederatedAuthenticatorServiceComponent.java) class as well since the authenticator is written as OSGI service to deploy in the WSO2 Identity Server and register it as UAEPass Federated Authenticator.
 
-The [UAEPassAuthenticator](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/main/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java) should be written by extending the [AbstractApplicationAuthenticator](https://github.com/wso2/carbon-identity-framework/blob/v5.18.187/components/authentication-framework/org.wso2.carbon.identity.application.authentication.framework/src/main/java/org/wso2/carbon/identity/application/authentication/framework/AbstractApplicationAuthenticator.java) class and implementing the [FederatedApplicationAuthenticator](https://github.com/wso2/carbon-identity-framework/blob/master/components/authentication-framework/org.wso2.carbon.identity.application.authentication.framework/src/main/java/org/wso2/carbon/identity/application/authentication/framework/FederatedApplicationAuthenticator.java) interface.
+The [`UAEPassAuthenticator`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/main/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java) should be written by extending the [`AbstractApplicationAuthenticator`](https://github.com/wso2/carbon-identity-framework/blob/v5.18.187/components/authentication-framework/org.wso2.carbon.identity.application.authentication.framework/src/main/java/org/wso2/carbon/identity/application/authentication/framework/AbstractApplicationAuthenticator.java) class and implementing the [FederatedApplicationAuthenticator](https://github.com/wso2/carbon-identity-framework/blob/master/components/authentication-framework/org.wso2.carbon.identity.application.authentication.framework/src/main/java/org/wso2/carbon/identity/application/authentication/framework/FederatedApplicationAuthenticator.java) interface.
 
 | Class name            | Super class                       | Interface                         |
 | --------------------- | --------------------------------- | --------------------------------- |
 | UAEPassAuthenticator  | AbstractApplicationAuthenticator  | FederatedApplicationAuthenticator |
 
-# Methods:
+### Methods:
 
-[boolean canHandle(HttpServletRequest request)](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L56)
+[`boolean canHandle(HttpServletRequest request)`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L56)
 | Return        | Parameter           |
 | ------------- | ------------------- |
 | Boolean       | HttpServletRequest  |
 
 Specifies whether this authenticator can handle the authentication response.
 
-[String getFriendlyName()](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L63)
-This is the name which is going to appear as the display name of the custom federated authenticator. It will appear as “UAEPass Federated Authenticator Configuration” in WSO2 IS, Identity Providers→ Local and Outbound Authenticators → Federated Authentication → Custom Federated Authenticators.
+[`String getFriendlyName()`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L63)
 
-[String getName()](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L70)
+This is the name which is going to appear as the display name of the custom federated authenticator. It will appear as `UAEPass Federated Authenticator Configuration` in WSO2 IS, `Identity Providers` → `Local and Outbound Authenticators` → `Federated Authentication` → `Custom Federated Authenticators`.
 
-This name is going to appear as an unique identifier of the component. Once you spin up WSO2 IS, then open inspect elements. Now navigate to the federated authenticator’s custom user input fields. Then you may be able to see how the name and id of those input fields are listed as. Always starting as “UAEPassFederatedAuthenticator”.
+[`String getName()`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L70)
 
-[String getClaimDialectURI()](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L77)
+This name is going to appear as an unique identifier of the component. Once you spin up WSO2 IS, then open inspect elements. Now navigate to the federated authenticator’s custom user input fields. Then you may be able to see how the name and id of those input fields are listed as. Always starting as `UAEPassFederatedAuthenticator`.
+
+[`String getClaimDialectURI()`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L77)
 
 As usually it shows the claim dialect. Also can be configured as a custom user input field.
 
-[List Property getConfigurationProperties()](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L84)
+[`List Property getConfigurationProperties()`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L84)
   
 List down all the custom user input fields of the federated authenticator. Those user inputs hold the values as key value pairs. Therefore having a HashMap is a must especially in this case. But within this method it is not going to take those values that the user already input. Just take the constant values which were set.
 
-[void initiateAuthenticationRequest(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context)](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L166)
+[`void initiateAuthenticationRequest(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context)`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L166)
 
 | Return         | Parameter             |
 | -------------- | --------------------- |
-| List<Property> | HttpServletRequest    |
-|                | HttpServletResponse   |                
+|                | HttpServletRequest    |
+| List<Property> | HttpServletResponse   |                
 |                | AuthenticationContext |
 
 Redirects the user to the login page in order to authenticate. In this UAE Pass Authenticator plugin, the user is redirected to the login page of the application which is configured in the UAEPass side which acts as the external Identity Provider. Within this method, it's going to fetch out the exact data inserted in above user input fields in UAEPass Federated Authenticator. 
