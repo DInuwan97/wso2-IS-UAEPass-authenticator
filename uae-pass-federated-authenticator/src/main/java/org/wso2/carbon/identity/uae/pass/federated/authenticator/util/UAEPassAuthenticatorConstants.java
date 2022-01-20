@@ -23,4 +23,8 @@ public class UAEPassAuthenticatorConstants {
     public static final String ACR_VALUES = "acr_values";
 
     public static final String OIDC_DIALECT = "http://wso2.org/oidc/claim";
+
+    public static final String RESPONSE_TYPE = "response_type";
+    public static final String REDIRECT_URI = "redirect_uri";
+    public static final String SCOPE = "scope";
 }

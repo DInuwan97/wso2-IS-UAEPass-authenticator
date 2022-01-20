@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -18,6 +18,7 @@
 package org.wso2.carbon.identity.uae.pass.federated.authenticator;
 
 import com.nimbusds.jose.util.JSONObjectUtils;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -38,57 +39,64 @@ import org.wso2.carbon.identity.application.authentication.framework.model.Authe
 import org.wso2.carbon.identity.application.common.model.Property;
 import org.wso2.carbon.identity.core.ServiceURLBuilder;
 import org.wso2.carbon.identity.core.URLBuilderException;
+import org.wso2.carbon.identity.uae.pass.federated.authenticator.util.UAEPassAuthenticatorConstants;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public class UAEPassAuthenticator extends AbstractApplicationAuthenticator implements FederatedApplicationAuthenticator {
+public class UAEPassAuthenticator extends AbstractApplicationAuthenticator
+        implements FederatedApplicationAuthenticator {
 
     private static final Log log = LogFactory.getLog(UAEPassAuthenticator.class);
+
     @Override
     /**
      * @param request
      * @return Boolean
-     */
-    public boolean canHandle(HttpServletRequest request) {
+     */ public boolean canHandle(HttpServletRequest request) {
         return UAEPassAuthenticatorConstants.LOGIN_TYPE.equals(getLoginType(request));
     }
+
     @Override
     /**
      * @return String
-     */
-    public String getFriendlyName() {
+     */ public String getFriendlyName() {
         return "UAE Pass Federated";
     }
+
     @Override
     /**
      * @return String
-     */
-    public String getName() {
-        return "UAEPassFederatedAuthenticator";
+     */ public String getName() {
+        return "UAEPassFederatedAuthenticator"; //avoid hard code vals
     }
+
     @Override
     /**
-     * @return String
-     */
-    public String getClaimDialectURI() {
+     * @return String //explain the method
+     */ public String getClaimDialectURI() {
         return UAEPassAuthenticatorConstants.OIDC_DIALECT;
     }
+
+    @SuppressWarnings("checkstyle:LocalVariableName")
     @Override
     /**
      * @return List<Property> federated authenticator properties
-     */
-    public List<Property> getConfigurationProperties() {
+     */ public ArrayList<Property> getConfigurationProperties() {
 
-        List<Property> configProperties = new ArrayList<>();
+        //TODO:use enum for constants
+        ArrayList<Property> configProperties = new ArrayList<>();
         Property clientId = new Property();
         clientId.setName(UAEPassAuthenticatorConstants.CLIENT_ID);
         clientId.setDisplayName("Client Id");
         clientId.setRequired(true);
-        clientId.setDescription("Enter OAuth2/OpenID Connect client identifier value");
+        clientId.setDescription("Enter OAuth2/OpenID Connect client identifier value"); //use enum for constants
         clientId.setType("string");
         clientId.setDisplayOrder(1);
         configProperties.add(clientId);
@@ -137,18 +145,17 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         locales.setDisplayOrder(6);
         configProperties.add(locales);
 
-        Property acr_values = new Property();
-        acr_values.setName(UAEPassAuthenticatorConstants.ACR_VALUES);
-        acr_values.setDisplayName("ACR Values");
-        acr_values.setRequired(true);
-        acr_values.setDescription("Enter the conditions for authenticating the user who must authorize the access");
-        acr_values.setType("string");
-        acr_values.setDisplayOrder(7);
-        configProperties.add(acr_values);
+        Property acrValues = new Property();
+        acrValues.setName(UAEPassAuthenticatorConstants.ACR_VALUES);
+        acrValues.setDisplayName("ACR Values");
+        acrValues.setRequired(true);
+        acrValues.setDescription("Enter the conditions for authenticating the user who must authorize the access");
+        acrValues.setType("string");
+        acrValues.setDisplayOrder(7);
+        configProperties.add(acrValues);
 
-        if (log.isDebugEnabled()) {
-            log.info("customized input fields are created.");
-        }
+        //add a property for additional scope
+
         return configProperties;
     }
 
@@ -167,47 +174,41 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                                                  AuthenticationContext context) throws AuthenticationFailedException {
 
         try {
-            if(log.isDebugEnabled()){
+            if (log.isDebugEnabled()) {
                 log.info("request hits towards thr login.do");
             }
             Map<String, String> authenticatorProperties = context.getAuthenticatorProperties();
             if (authenticatorProperties != null) {
 
                 String clientId = authenticatorProperties.get(UAEPassAuthenticatorConstants.CLIENT_ID);
-                String authorizationEP =
-                        authenticatorProperties.get(UAEPassAuthenticatorConstants.OAUTH2_AUTHZ_URL);
+                String authorizationEP = authenticatorProperties.get(UAEPassAuthenticatorConstants.OAUTH2_AUTHZ_URL);
                 String callBackUrl = authenticatorProperties.get(UAEPassAuthenticatorConstants.CALLBACK_URL);
                 String state = context.getContextIdentifier() + "," + UAEPassAuthenticatorConstants.LOGIN_TYPE;
 
-                String ui_locales = authenticatorProperties.get(UAEPassAuthenticatorConstants.UI_LOCALES);
-                String acr_values = authenticatorProperties.get(UAEPassAuthenticatorConstants.ACR_VALUES);
+                String uiLocales = authenticatorProperties.get(UAEPassAuthenticatorConstants.UI_LOCALES);
+                String acrValues = authenticatorProperties.get(UAEPassAuthenticatorConstants.ACR_VALUES);
                 String scope = UAEPassAuthenticatorConstants.OAUTH_OIDC_SCOPE;
 
-               OAuthClientRequest authzRequest = UAEPassOAuthClientRequest.authorizationLocationEndpoint(authorizationEP)
-                        .setClientId(clientId)
-                        .setRedirectURI(callBackUrl)
-                        .setResponseType(UAEPassAuthenticatorConstants.OAUTH2_GRANT_TYPE_CODE).setScope(scope)
-                        .setState(state)
-                        .setUiLocales(ui_locales)
-                        .setAcrValues(acr_values).
-                        buildQueryMessage();
+                OAuthClientRequest authzRequest =
+                        UAEPassOAuthClientRequestWrapper.authorizationLocationEndpoint(authorizationEP)
+                                .setClientId(clientId).setRedirectURI(callBackUrl)
+                                .setResponseType(UAEPassAuthenticatorConstants.OAUTH2_GRANT_TYPE_CODE).setScope(scope)
+                                .setState(state).setUiLocales(uiLocales).setAcrValues(acrValues).buildQueryMessage();
 
                 String loginPage = authzRequest.getLocationUri();
                 response.sendRedirect(loginPage);
             } else {
-                if(log.isDebugEnabled()) {
-                    log.error("authentication properties are not null");
-                }
-                throw new AuthenticationFailedException("Error while retrieving properties. " +
-                        "Authenticator Properties cannot be null");
+                throw new AuthenticationFailedException(
+                        "Error while retrieving properties. " + "Authenticator Properties cannot be null");
             }
         } catch (OAuthSystemException | IOException e) {
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.error("Authorization code request building failed.", e);
             }
             throw new AuthenticationFailedException("Exception while building authorization code request", e);
         }
     }
+
     /**
      * Implements the logic of the UAE Pass federated authenticator.
      *
@@ -217,7 +218,8 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
      * @throws AuthenticationFailedException - exception while creating the access token or id token
      */
     @Override
-    protected void processAuthenticationResponse(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context) throws AuthenticationFailedException {
+    protected void processAuthenticationResponse(HttpServletRequest request, HttpServletResponse response,
+                                                 AuthenticationContext context) throws AuthenticationFailedException {
 
         try {
             OAuthAuthzResponse authzResponse = OAuthAuthzResponse.oauthCodeAuthzResponse(request);
@@ -244,37 +246,36 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                 jsonObject = getIdTokenClaims(context, idToken);
                 String authenticatedUserId = getAuthenticatedUser(jsonObject);
                 if (authenticatedUserId == null) {
-                    throw new AuthenticationFailedException("Cannot find the userId from the id_token sent " +
-                            "by the federated IDP.");
+                    throw new AuthenticationFailedException(
+                            "Cannot find the userId from the id_token sent " + "by the federated IDP.");
                 }
-                authenticatedUser = AuthenticatedUser
-                        .createFederateAuthenticatedUserFromSubjectIdentifier(authenticatedUserId);
+                authenticatedUser =
+                        AuthenticatedUser.createFederateAuthenticatedUserFromSubjectIdentifier(authenticatedUserId);
             } else {
                 authenticatedUser = AuthenticatedUser.createFederateAuthenticatedUserFromSubjectIdentifier(
                         getAuthenticatedUser(jsonObject));
             }
             context.setSubject(authenticatedUser);
         } catch (OAuthProblemException e) {
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.error("Authentication process failed", e);
             }
             throw new AuthenticationFailedException("Authentication process failed", e);
         }
     }
 
-
     @Override
     /**
      * @param request
      * @return String
-     */
-    public String getContextIdentifier(HttpServletRequest request) {
+     */ public String getContextIdentifier(HttpServletRequest request) {
         String state = request.getParameter(UAEPassAuthenticatorConstants.OAUTH2_PARAM_STATE);
         if (state != null) {
             return state.split(",")[0];
         } else {
-            if(log.isDebugEnabled()) {
-                log.error("An unique identifier couldn't issue for both Request and Response. ContextIdentifier is NULL");
+            if (log.isDebugEnabled()) {
+                log.error(
+                        "An unique identifier couldn't issue for both Request and Response. ContextIdentifier is NULL");
             }
             return null;
         }
@@ -291,16 +292,17 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
     /**
      * @param context
      * @param idToken
-     * @return Map<Strng,Object> - decoded JWT payload via JSON Key value pairs
+     * @return Map<Strng, Object> - decoded JWT payload via JSON Key value pairs
      */
     private Map<String, Object> getIdTokenClaims(AuthenticationContext context, String idToken) {
 
         context.setProperty(UAEPassAuthenticatorConstants.ID_TOKEN, idToken);
         String base64Body = idToken.split("\\.")[1];
         byte[] decoded = Base64.decodeBase64(base64Body.getBytes());
-        Set<Map.Entry<String, Object>> jwtAttributeSet = new HashSet<>();
+        HashSet<Map.Entry<String, Object>> jwtAttributeSet = new HashSet<>();
         try {
-            jwtAttributeSet = JSONObjectUtils.parseJSONObject(new String(decoded)).entrySet();
+            jwtAttributeSet =
+                    (HashSet<Map.Entry<String, Object>>) JSONObjectUtils.parse(new String(decoded)).entrySet();
         } catch (ParseException e) {
             log.error("Error occurred while parsing JWT provided by federated IDP: ", e);
         }
@@ -313,13 +315,14 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
 
     /**
      * Request the access token - Create a request to access token endpoint of the external IdP.
+     *
      * @param context
      * @param authzResponse
-     * @throws AuthenticationFailedException
      * @return OAuthClientRequest
+     * @throws AuthenticationFailedException
      */
-    protected OAuthClientRequest getAccessTokenRequest(AuthenticationContext context, OAuthAuthzResponse
-            authzResponse) throws AuthenticationFailedException {
+    protected OAuthClientRequest getAccessTokenRequest(AuthenticationContext context, OAuthAuthzResponse authzResponse)
+            throws AuthenticationFailedException {
 
         Map<String, String> authenticatorProperties = context.getAuthenticatorProperties();
         String clientId = authenticatorProperties.get(UAEPassAuthenticatorConstants.CLIENT_ID);
@@ -329,20 +332,21 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
 
         OAuthClientRequest accessTokenRequest;
         try {
-            accessTokenRequest = OAuthClientRequest.tokenLocation(tokenEndPoint).setGrantType(GrantType
-                    .AUTHORIZATION_CODE).setClientId(clientId).setClientSecret(clientSecret).setRedirectURI
-                    (callbackUrl).setCode(authzResponse.getCode()).buildBodyMessage();
+            accessTokenRequest =
+                    OAuthClientRequest.tokenLocation(tokenEndPoint).setGrantType(GrantType.AUTHORIZATION_CODE)
+                            .setClientId(clientId).setClientSecret(clientSecret).setRedirectURI(callbackUrl)
+                            .setCode(authzResponse.getCode()).buildBodyMessage();
             if (accessTokenRequest != null) {
                 String serverURL = ServiceURLBuilder.create().build().getAbsolutePublicURL();
                 accessTokenRequest.addHeader(UAEPassAuthenticatorConstants.HTTP_ORIGIN_HEADER, serverURL);
             }
         } catch (OAuthSystemException e) {
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.error("Access Token building request failed", e);
             }
             throw new AuthenticationFailedException("Error while building access token request", e);
         } catch (URLBuilderException e) {
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.error("Access Token building request failed", e);
             }
             throw new RuntimeException("Error occurred while building URL in tenant qualified mode.", e);
@@ -363,7 +367,7 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
         try {
             oAuthResponse = oAuthClient.accessToken(accessRequest);
         } catch (OAuthSystemException | OAuthProblemException e) {
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 log.error("Access Token requesting failed", e);
             }
             throw new AuthenticationFailedException("Exception while requesting access token");
@@ -385,8 +389,8 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator imple
                     return stateElements[1];
                 }
             } catch (Exception e) {
-                if(log.isDebugEnabled()){
-                    log.error("Empty split elements in state",e);
+                if (log.isDebugEnabled()) {
+                    log.error("Empty split elements in state", e);
                 }
             }
         }

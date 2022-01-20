@@ -5,24 +5,26 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.parameters.OAuthParametersApplier;
 import org.apache.oltu.oauth2.common.parameters.QueryParameterApplier;
 
+import org.wso2.carbon.identity.uae.pass.federated.authenticator.util.UAEPassAuthenticatorConstants;
+
 import java.util.HashMap;
 import java.util.Map;
 
-
 //TODO:CHANGE THE CLASS NAME INTO REQ WRAPPER
 //TODO: create a model package for this
-public class UAEPassOAuthClientRequestWrapper extends OAuthClientRequest{
+@SuppressWarnings({"unchecked", "deprecated", "checkstyle:JavadocType"})
+public class UAEPassOAuthClientRequestWrapper extends OAuthClientRequest {
 
     protected UAEPassOAuthClientRequestWrapper(String url) {
         super(url);
     }
 
     /**
-     *
      * @param url
      * @return AuthenticationRequestBuilder
      */
-    public static UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder authorizationLocationEndpoint(String url) {
+    public static UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder authorizationLocationEndpoint(
+            String url) {
         return new UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder(url);
     }
 
@@ -31,10 +33,8 @@ public class UAEPassOAuthClientRequestWrapper extends OAuthClientRequest{
             super(url);
         }
 
-
-        //TODO:remove hard code values
         public UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setResponseType(String type) {
-            this.parameters.put("response_type", type);
+            this.parameters.put(UAEPassAuthenticatorConstants.RESPONSE_TYPE, type);
             return this;
         }
 
@@ -43,28 +43,28 @@ public class UAEPassOAuthClientRequestWrapper extends OAuthClientRequest{
             return this;
         }
 
-        public UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setUiLocales(String ui_locales){
-            this.parameters.put("ui_locales",ui_locales);
+        public UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setUiLocales(String uiLocales) {
+            this.parameters.put(UAEPassAuthenticatorConstants.UI_LOCALES, uiLocales);
             return this;
         }
 
-        public UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setAcrValues(String acr_values){
-            this.parameters.put("acr_values",acr_values);
+        public UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setAcrValues(String acrValues) {
+            this.parameters.put(UAEPassAuthenticatorConstants.ACR_VALUES, acrValues);
             return this;
         }
 
         public UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setRedirectURI(String uri) {
-            this.parameters.put("redirect_uri", uri);
+            this.parameters.put(UAEPassAuthenticatorConstants.REDIRECT_URI, uri);
             return this;
         }
-//explain the method
-        public  UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setState(String state) {
-            this.parameters.put("state", state);
+
+        public UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setState(String state) {
+            this.parameters.put(UAEPassAuthenticatorConstants.OAUTH2_PARAM_STATE, state);
             return this;
         }
 
         public UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder setScope(String scope) {
-            this.parameters.put("scope", scope);
+            this.parameters.put(UAEPassAuthenticatorConstants.SCOPE, scope);
             return this;
         }
     }
@@ -78,13 +78,10 @@ public class UAEPassOAuthClientRequestWrapper extends OAuthClientRequest{
             this.url = url;
         }
 
-
-        //TODO:change applier to meaningfull name
         public UAEPassOAuthClientRequestWrapper buildQueryMessage() throws OAuthSystemException {
             UAEPassOAuthClientRequestWrapper request = new UAEPassOAuthClientRequestWrapper(this.url);
             this.applier = new QueryParameterApplier();
             return (UAEPassOAuthClientRequestWrapper) this.applier.applyOAuthParameters(request, this.parameters);
         }
     }
-
 }
