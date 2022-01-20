@@ -45,7 +45,7 @@ public class UAEPassFederatedAuthenticatorServiceComponent {
                 log.debug("UAE Pass Federated Authenticator bundle is activated");
             }
         } catch (Throwable e) {
-            log.fatal(" Error while activating custom federated authenticator ", e);
+            log.fatal(" Error while activating UAE Pass federated authenticator ", e);
         }
     }
 
