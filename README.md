@@ -77,7 +77,7 @@ This name is going to appear as an unique identifier of the component. Once you 
 As usually it shows the claim dialect. Also can be configured as a custom user input field.
 
 [`List Property getConfigurationProperties()`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L84)
-
+  
 List down all the custom user input fields of the federated authenticator. Those user inputs hold the values as key value pairs. Therefore having a HashMap is a must especially in this case. But within this method it is not going to take those values that the user already input. Just take the constant values which were set.
 
 [`void initiateAuthenticationRequest(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context)`](https://github.com/DInuwan97/wso2-IS-UAEPass-authenticator/blob/0ee102a1314236c0b46157975c314a71b923e101/uae-pass-federated-authenticator/src/main/java/org/wso2/carbon/identity/uae/pass/federated/authenticator/UAEPassAuthenticator.java#L166)
@@ -88,7 +88,7 @@ List down all the custom user input fields of the federated authenticator. Those
 | List<Property> | HttpServletResponse   |                
 |                | AuthenticationContext |
 
-Redirects the user to the login page in order to authenticate. In this UAE Pass Authenticator plugin, the user is redirected to the login page of the application which is configured in the UAEPass side which acts as the external Identity Provider. Within this method, it's going to fetch out the exact data inserted in above user input fields in UAEPass Federated Authenticator.
+Redirects the user to the login page in order to authenticate. In this UAE Pass Authenticator plugin, the user is redirected to the login page of the application which is configured in the UAEPass side which acts as the external Identity Provider. Within this method, it's going to fetch out the exact data inserted in above user input fields in UAEPass Federated Authenticator. 
 
 Once those user input fields are fetched, using Java builder design pattern the authorization request is going to be created. `authzRequest`.
 
