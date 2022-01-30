@@ -21,7 +21,7 @@
 
     <groupId>uae-pass-federated-authenticator</groupId>
     <artifactId>org.wso2.carbon.identity.uae.pass.federated.authenticator</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - UAE Pass Federated Authenticator</name>
 
