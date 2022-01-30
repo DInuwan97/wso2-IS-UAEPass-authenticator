@@ -58,40 +58,54 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator
 
     @Override
     /**
+     * checks wheather the request and response can handle by the federated IdP
+     *
      * @param request
      * @return Boolean
-     */ public boolean canHandle(HttpServletRequest request) {
+     */
+    public boolean canHandle(HttpServletRequest request) {
         return UAEPassAuthenticatorConstants.LOGIN_TYPE.equals(getLoginType(request));
     }
 
     @Override
     /**
+     * returns the federated IdP component's friendly name
+     *
      * @return String
-     */ public String getFriendlyName() {
+     */
+    public String getFriendlyName() {
         return UAEPassAuthenticatorConstants.FEDERATED_IDP_COMPONENT_FRIENDLY_NAME;
     }
 
     @Override
     /**
+     * returns the federated IdP component name
+     *
      * @return String
-     */ public String getName() {
+     */
+    public String getName() {
         return UAEPassAuthenticatorConstants.FEDERATED_IDP_COMPONENT_NAME;
     }
 
     @Override
     /**
-     * @return String //explain the method
-     */ public String getClaimDialectURI() {
+     * returns the claim dialect URL
+     *
+     * @return String
+     */
+    public String getClaimDialectURI() {
         return UAEPassAuthenticatorConstants.OIDC_DIALECT;
     }
 
     @SuppressWarnings("checkstyle:LocalVariableName")
     @Override
     /**
+     * Returns the all user input fields of federated authenticator component
+     *
      * @return List<Property> federated authenticator properties
-     */ public ArrayList<Property> getConfigurationProperties() {
+     */
+    public ArrayList<Property> getConfigurationProperties() {
 
-        //TODO:use enum for constants
         ArrayList<Property> configProperties = new ArrayList<>();
         Property clientId = new Property();
         clientId.setName(UAEPassAuthenticatorConstants.CLIENT_ID);
@@ -267,6 +281,8 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator
 
     @Override
     /**
+     * Returns an unique string to identify each request and response separetely
+     *
      * @param request
      * @return String
      */ public String getContextIdentifier(HttpServletRequest request) {
@@ -283,6 +299,8 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator
     }
 
     /**
+     * Returns the user context of authenticated user
+     *
      * @param oidcClaims
      * @return String
      */
@@ -356,6 +374,8 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator
     }
 
     /**
+     * returns the OAuth type response to the back channel
+     *
      * @param oAuthClient
      * @param accessRequest
      * @return OAuthClientResponse

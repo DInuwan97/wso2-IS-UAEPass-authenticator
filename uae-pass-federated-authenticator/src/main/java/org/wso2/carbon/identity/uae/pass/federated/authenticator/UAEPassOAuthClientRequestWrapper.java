@@ -10,8 +10,7 @@ import org.wso2.carbon.identity.uae.pass.federated.authenticator.util.UAEPassAut
 import java.util.HashMap;
 import java.util.Map;
 
-//TODO:CHANGE THE CLASS NAME INTO REQ WRAPPER
-//TODO: create a model package for this
+
 @SuppressWarnings({"unchecked", "deprecated", "checkstyle:JavadocType"})
 public class UAEPassOAuthClientRequestWrapper extends OAuthClientRequest {
 
@@ -28,6 +27,9 @@ public class UAEPassOAuthClientRequestWrapper extends OAuthClientRequest {
         return new UAEPassOAuthClientRequestWrapper.AuthenticationRequestBuilder(url);
     }
 
+    /**
+     * process of initiating Authentication request
+     */
     public static class AuthenticationRequestBuilder extends UAEPassOAuthClientRequestWrapper.OAuthRequestBuilder {
         public AuthenticationRequestBuilder(String url) {
             super(url);
