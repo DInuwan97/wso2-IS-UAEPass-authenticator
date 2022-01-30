@@ -39,6 +39,7 @@ import org.wso2.carbon.identity.application.authentication.framework.model.Authe
 import org.wso2.carbon.identity.application.common.model.Property;
 import org.wso2.carbon.identity.core.ServiceURLBuilder;
 import org.wso2.carbon.identity.core.URLBuilderException;
+import org.wso2.carbon.identity.uae.pass.federated.authenticator.util.PropertyData;
 import org.wso2.carbon.identity.uae.pass.federated.authenticator.util.UAEPassAuthenticatorConstants;
 
 import java.io.IOException;
@@ -67,14 +68,14 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator
     /**
      * @return String
      */ public String getFriendlyName() {
-        return "UAE Pass Federated";
+        return UAEPassAuthenticatorConstants.FEDERATED_IDP_COMPONENT_FRIENDLY_NAME;
     }
 
     @Override
     /**
      * @return String
      */ public String getName() {
-        return "UAEPassFederatedAuthenticator"; //avoid hard code vals
+        return UAEPassAuthenticatorConstants.FEDERATED_IDP_COMPONENT_NAME;
     }
 
     @Override
@@ -94,63 +95,63 @@ public class UAEPassAuthenticator extends AbstractApplicationAuthenticator
         ArrayList<Property> configProperties = new ArrayList<>();
         Property clientId = new Property();
         clientId.setName(UAEPassAuthenticatorConstants.CLIENT_ID);
-        clientId.setDisplayName("Client Id");
+        clientId.setDisplayName(PropertyData.PropertyDisplayName.CLIENT_ID_DISPLAY_NAME.toString());
         clientId.setRequired(true);
-        clientId.setDescription("Enter OAuth2/OpenID Connect client identifier value"); //use enum for constants
-        clientId.setType("string");
+        clientId.setDescription(PropertyData.PropertyDescription.CLIENT_ID_DESCRIPTION.toString());
+        clientId.setType(PropertyData.PropertyType.PROPERTY_TYPE_STRING.toString());
         clientId.setDisplayOrder(1);
         configProperties.add(clientId);
 
         Property clientSecret = new Property();
         clientSecret.setName(UAEPassAuthenticatorConstants.CLIENT_SECRET);
-        clientSecret.setDisplayName("Client Secret");
+        clientSecret.setDisplayName(PropertyData.PropertyDisplayName.CLIENT_SECRET_DISPLAY_NAME.toString());
         clientSecret.setRequired(true);
-        clientSecret.setDescription("Enter OAuth2/OpenID Connect client secret value");
-        clientSecret.setType("string");
+        clientSecret.setDescription(PropertyData.PropertyDescription.CLIENT_SECRET_DESCRIPTION.toString());
+        clientSecret.setType(PropertyData.PropertyType.PROPERTY_TYPE_STRING.toString());
         clientSecret.setDisplayOrder(2);
         clientSecret.setConfidential(true);
         configProperties.add(clientSecret);
 
         Property callbackUrl = new Property();
-        callbackUrl.setDisplayName("Callback URL");
+        callbackUrl.setDisplayName(PropertyData.PropertyDisplayName.CALLBACK_URL_DISPLAY_NAME.toString());
         callbackUrl.setName(UAEPassAuthenticatorConstants.CALLBACK_URL);
-        callbackUrl.setDescription("The callback URL used to partner identity provider credentials.");
+        callbackUrl.setDescription(PropertyData.PropertyDescription.CALLBACK_URL_DESCRIPTION.toString());
         callbackUrl.setDisplayOrder(3);
         configProperties.add(callbackUrl);
 
         Property authzEpUrl = new Property();
         authzEpUrl.setName(UAEPassAuthenticatorConstants.OAUTH2_AUTHZ_URL);
-        authzEpUrl.setDisplayName("Authorization Endpoint URL");
+        authzEpUrl.setDisplayName(PropertyData.PropertyDisplayName.AUTHORIZATION_EP_URL_DISPLAY_NAME.toString());
         authzEpUrl.setRequired(true);
-        authzEpUrl.setDescription("Enter OAuth2/OpenID Connect authorization endpoint URL value");
-        authzEpUrl.setType("string");
+        authzEpUrl.setDescription(PropertyData.PropertyDescription.AUTHORIZATION_EP_URL_DESCRIPTION.toString());
+        authzEpUrl.setType(PropertyData.PropertyType.PROPERTY_TYPE_STRING.toString());
         authzEpUrl.setDisplayOrder(4);
         configProperties.add(authzEpUrl);
 
         Property tokenEpUrl = new Property();
         tokenEpUrl.setName(UAEPassAuthenticatorConstants.OAUTH2_TOKEN_URL);
-        tokenEpUrl.setDisplayName("Token Endpoint URL");
+        tokenEpUrl.setDisplayName(PropertyData.PropertyDisplayName.TOKEN_EP_URL_DISPLAY_NAME.toString());
         tokenEpUrl.setRequired(true);
-        tokenEpUrl.setDescription("Enter OAuth2/OpenID Connect token endpoint URL value");
-        tokenEpUrl.setType("string");
+        tokenEpUrl.setDescription(PropertyData.PropertyDescription.TOKEN_EP_URL_DESCRIPTION.toString());
+        tokenEpUrl.setType(PropertyData.PropertyType.PROPERTY_TYPE_STRING.toString());
         tokenEpUrl.setDisplayOrder(5);
         configProperties.add(tokenEpUrl);
 
         Property locales = new Property();
         locales.setName(UAEPassAuthenticatorConstants.UI_LOCALES);
-        locales.setDisplayName("Locales");
+        locales.setDisplayName(PropertyData.PropertyDisplayName.LOCALES_DISPLAY_NAME.toString());
         locales.setRequired(true);
-        locales.setDescription("Enter the en/ar to render English/Arabic Login Pages");
-        locales.setType("string");
+        locales.setDescription(PropertyData.PropertyDescription.LOCALES_DESCRIPTION.toString());
+        locales.setType(PropertyData.PropertyType.PROPERTY_TYPE_STRING.toString());
         locales.setDisplayOrder(6);
         configProperties.add(locales);
 
         Property acrValues = new Property();
         acrValues.setName(UAEPassAuthenticatorConstants.ACR_VALUES);
-        acrValues.setDisplayName("ACR Values");
+        acrValues.setDisplayName(PropertyData.PropertyDisplayName.ACR_VALUES_DISPLAY_NAME.toString());
         acrValues.setRequired(true);
-        acrValues.setDescription("Enter the conditions for authenticating the user who must authorize the access");
-        acrValues.setType("string");
+        acrValues.setDescription(PropertyData.PropertyDescription.ACR_VALUES_DESCRIPTION.toString());
+        acrValues.setType(PropertyData.PropertyType.PROPERTY_TYPE_STRING.toString());
         acrValues.setDisplayOrder(7);
         configProperties.add(acrValues);
 
