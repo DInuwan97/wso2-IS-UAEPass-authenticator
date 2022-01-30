@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/uae-pass-federated-authenticator/org.wso2.carbon.identity.uae.pass.federated.authenticator.iml" filepath="$PROJECT_DIR$/uae-pass-federated-authenticator/org.wso2.carbon.identity.uae.pass.federated.authenticator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/wso2-IS-UAEPass-authenticator.iml" filepath="$PROJECT_DIR$/.idea/wso2-IS-UAEPass-authenticator.iml" />
+    </modules>
+  </component>
+</project>
