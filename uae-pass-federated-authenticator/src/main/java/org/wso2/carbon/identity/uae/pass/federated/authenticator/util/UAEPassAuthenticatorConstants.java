@@ -27,4 +27,7 @@ public class UAEPassAuthenticatorConstants {
     public static final String RESPONSE_TYPE = "response_type";
     public static final String REDIRECT_URI = "redirect_uri";
     public static final String SCOPE = "scope";
+
+    public static final String FEDERATED_IDP_COMPONENT_NAME = "UAEPassFederatedAuthenticator";
+    public static final String FEDERATED_IDP_COMPONENT_FRIENDLY_NAME = "UAE Pass Federated";
 }
